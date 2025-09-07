@@ -1,0 +1,37 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local properties
+local.properties
+
+# IntelliJ/Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Java/Kotlin
+*.class
+*.jar
+*.war
+*.ear
+
+# Generated files
+app/build/
+
+# Misc
+*.swp
+*.swo
+
+# Android specific
+.cxx/
+*.apk
+*.ap_
