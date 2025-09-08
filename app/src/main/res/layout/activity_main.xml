@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="18dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="A1 - Média das Avaliações On-line (Obrigatório)"
+            android:text="*A1 - Média das AVA1 e AVA2 (Obrigatório)"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -119,7 +119,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="NFp (Nota Final Ponderada):"
+            android:text="Nota Final (NFp)"
             android:textSize="14sp"
             android:layout_marginBottom="4dp" />
 
@@ -127,28 +127,20 @@
             android:id="@+id/textViewResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="--"
+            android:text=""
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#2196F3"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Approval Status -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Status:"
-            android:textSize="14sp"
             android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/textViewApproved"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="--"
+            android:layout_marginBottom="16dp"
+            android:text=""
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 
