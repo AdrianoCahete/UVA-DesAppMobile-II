@@ -1,6 +1,9 @@
 package dev.adrianocahete.mediacalc;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextA1, editTextA2, editTextA3;
-    private TextView textViewResult, textViewApproved;
+    private TextView textViewResult, textViewApproved, textViewTooltip;
     private Button buttonCalculate;
 
     @Override
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         });
         initializeViews();
         setupCalculateButton();
+        setupTooltip();
+        setupTextWatchers();
     }
 
     private void initializeViews() {
@@ -39,11 +44,79 @@ public class MainActivity extends AppCompatActivity {
         editTextA3 = findViewById(R.id.editTextA3);
         textViewResult = findViewById(R.id.textViewResult);
         textViewApproved = findViewById(R.id.textViewApproved);
+        textViewTooltip = findViewById(R.id.textViewTooltip);
         buttonCalculate = findViewById(R.id.buttonCalculate);
     }
 
     private void setupCalculateButton() {
         buttonCalculate.setOnClickListener(v -> calculateNFp());
+    }
+
+    private void setupTooltip() {
+        textViewTooltip.setOnClickListener(v -> showFormulaDialog());
+    }
+
+    private void setupTextWatchers() {
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateFields();
+            }
+        };
+
+        editTextA1.addTextChangedListener(textWatcher);
+        editTextA2.addTextChangedListener(textWatcher);
+        editTextA3.addTextChangedListener(textWatcher);
+    }
+
+    private void validateFields() {
+        String a1Text = editTextA1.getText().toString().trim();
+        String a2Text = editTextA2.getText().toString().trim();
+        String a3Text = editTextA3.getText().toString().trim();
+
+        boolean isA1Valid = !TextUtils.isEmpty(a1Text) && isValidNumber(a1Text);
+        boolean hasValidA2OrA3 = (!TextUtils.isEmpty(a2Text) && isValidNumber(a2Text)) ||
+                                (!TextUtils.isEmpty(a3Text) && isValidNumber(a3Text));
+
+        buttonCalculate.setEnabled(isA1Valid && hasValidA2OrA3);
+    }
+
+    private boolean isValidNumber(String text) {
+        if (TextUtils.isEmpty(text)) return false;
+
+        try {
+            String normalizedText = text.replace(",", ".");
+            double value = Double.parseDouble(normalizedText);
+            return value >= 0 && value <= 10;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private void showFormulaDialog() {
+        // TODO: Mover pra strings
+        String formulaText =
+            "• Se A1 > 0 E (A2 ou A3) ≥ 5,0:\n" +
+            "  NFp = (A1 × 0,4) + (A2 ou A3 × 0,6)\n\n" +
+            "• Se A1 = 0 OU (A2 e A3) < 5,0:\n" +
+            "  NFp = (A1 × 0,4) + (A2 ou A3 × 0,6) ÷ 2\n\n" +
+            "Aprovação:\n" +
+            "• Se A1 igual à 0: Reprovado automaticamente\n" +
+            "• Se NFp maior OU igual à 6,0: Aprovado\n" +
+            "• Se NFp menor que 6,0: Reprovado\n\n" +
+            "Quando A2 e A3 estão preenchidos, usa-se a maior nota.";
+
+        new AlertDialog.Builder(this)
+            .setTitle("Fórmula de Cálculo")
+            .setMessage(formulaText)
+            .setPositiveButton("OK", null)
+            .show();
     }
 
     private void calculateNFp() {
@@ -57,12 +130,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             a1 = Double.parseDouble(a1Text);
             if (a1 < 0 || a1 > 10) {
-                // TODO: Limitar o campo?
                 Toast.makeText(this, "A1 deve estar entre 0 e 10!", Toast.LENGTH_SHORT).show();
                 return;
             }
         } catch (NumberFormatException e) {
-            // TODO: Limitar o campo?
             Toast.makeText(this, "A1 deve ser um número válido!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -105,23 +176,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        double a2OrA3; // TODO: Melhorar esse nome de variavel
+        double higherGrade;
         if (hasA2 && hasA3) {
-            a2OrA3 = Math.max(a2, a3);
+            higherGrade = Math.max(a2, a3);
         } else if (hasA2) {
-            a2OrA3 = a2;
+            higherGrade = a2;
         } else {
-            a2OrA3 = a3;
+            higherGrade = a3;
         }
 
         // Fonte: https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/404306_383891/PDF/manual_ead.pdf
         double nfp;
-        if (a1 > 0.0 && a2OrA3 >= 5.0) {
+        if (a1 > 0.0 && higherGrade >= 5.0) {
             // A1 > 0 e (A2 ou A3) >= 5: NFp = (A1 x 0.4) + (A2 or A3 x 0.6)
-            nfp = (a1 * 0.4) + (a2OrA3 * 0.6);
+            nfp = (a1 * 0.4) + (higherGrade * 0.6);
         } else {
             // A1 = 0 e/ou (A2 e A3) < 5: NFp = (A1 x 0.4) + (A2 or A3 x 0.6)/2
-            nfp = (a1 * 0.4) + ((a2OrA3 * 0.6) / 2);
+            nfp = (a1 * 0.4) + ((higherGrade * 0.6) / 2);
         }
 
         boolean isApproved;
@@ -134,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
         textViewResult.setText(String.format("%.2f", nfp));
 
         if (isApproved) {
-            // TODO: Usar cores do tema
             textViewApproved.setText("Aprovado");
             textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
         } else {

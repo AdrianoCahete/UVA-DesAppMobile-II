@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:padding="16dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="*A1 - Média das AVA1 e AVA2 (Obrigatório)"
+            android:text="A1 - Média das Avaliações On-line (Obrigatório)"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -37,17 +37,17 @@
             android:layout_height="wrap_content"
             android:hint="Digite a nota A1"
             android:inputType="numberDecimal"
+            android:maxLength="4"
             android:layout_marginBottom="4dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nota entre 0 e 10 (aceita decimais: ex: 7,8)"
+            android:text="Nota entre 0 e 10 (aceita decimais: ex: 7,8 ou 7.8)"
             android:textSize="12sp"
             android:textColor="#666666"
             android:layout_marginBottom="16dp" />
 
-        <!-- A2 Input -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,12 +62,13 @@
             android:layout_height="wrap_content"
             android:hint="Digite a nota A2"
             android:inputType="numberDecimal"
+            android:maxLength="4"
             android:layout_marginBottom="4dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nota entre 0 e 10 (aceita decimais: ex: 9,3)"
+            android:text="Nota entre 0 e 10 (aceita decimais: ex: 9,3 ou 9.3)"
             android:textSize="12sp"
             android:textColor="#666666"
             android:layout_marginBottom="16dp" />
@@ -87,41 +88,55 @@
             android:layout_height="wrap_content"
             android:hint="Digite a nota A3"
             android:inputType="numberDecimal"
+            android:maxLength="4"
             android:layout_marginBottom="4dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nota entre 0 e 10 (aceita decimais: ex: 6,0)"
+            android:text="Nota entre 0 e 10 (aceita decimais: ex: 6,0 ou 6.0)"
             android:textSize="12sp"
             android:textColor="#666666"
             android:layout_marginBottom="24dp" />
 
-        <!-- Calculate Button -->
         <Button
             android:id="@+id/buttonCalculate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calcular NFp"
-            android:textSize="16sp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="24dp"
+            android:enabled="false"
+            android:maxWidth="320dp"
+            android:text="Calcular Média"
+            android:textColorLink="@color/design_default_color_primary"
+            android:textSize="16sp" />
 
-        <!-- Result Section -->
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Resultado:"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
 
-        <!-- NFp Result -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nota Final (NFp)"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="NFp (Nota Final Ponderada):"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textViewTooltip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(?)"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#2196F3"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewResult"
@@ -137,10 +152,10 @@
             android:id="@+id/textViewApproved"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:text=""
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 
