@@ -16,6 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextA1, editTextA2, editTextA3;
@@ -141,11 +143,6 @@ public class MainActivity extends AppCompatActivity {
         String a2Text = editTextA2.getText().toString().trim().replace(",", ".");
         String a3Text = editTextA3.getText().toString().trim().replace(",", ".");
 
-        if (TextUtils.isEmpty(a2Text) && TextUtils.isEmpty(a3Text)) {
-            Toast.makeText(this, "É necessário preencher A2 ou A3!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         double a2 = 0, a3 = 0;
         boolean hasA2 = false, hasA3 = false;
         if (!TextUtils.isEmpty(a2Text)) {
@@ -202,13 +199,13 @@ public class MainActivity extends AppCompatActivity {
             isApproved = nfp >= 6.0;
         }
 
-        textViewResult.setText(String.format("%.2f", nfp));
+        textViewResult.setText(String.format(Locale.getDefault(), "%.2f", nfp));
 
         if (isApproved) {
-            textViewApproved.setText("Aprovado");
+            textViewApproved.setText(getString(R.string.approved));
             textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
         } else {
-            textViewApproved.setText("Reprovado");
+            textViewApproved.setText(getString(R.string.failed));
             textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
         }
     }
