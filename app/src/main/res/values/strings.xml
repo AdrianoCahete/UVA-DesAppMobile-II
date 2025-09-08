@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MediaCalc</string>
+    <string name="approved">Aprovado</string>
+    <string name="failed">Reprovado</string>
 </resources>
