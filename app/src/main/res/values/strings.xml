@@ -1,5 +1,45 @@
-<resources>
-    <string name="app_name">MediaCalc</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">MediaCalc</string>
+
+    <string name="calculator_title">Calculadora de Média</string>
+    <string name="a1_label">A1 - Média das Avaliações On-line (Obrigatório)</string>
+    <string name="a1_hint">Digite a nota A1</string>
+    <string name="a1_description">Nota entre 0 e 10 (aceita decimais: ex: 7,8 ou 7.8)</string>
+    <string name="a2_label">A2 - Avaliação Presencial Regular</string>
+    <string name="a2_hint">Digite a nota A2</string>
+    <string name="a2_description">Nota entre 0 e 10 (aceita decimais: ex: 9,3 ou 9.3)</string>
+    <string name="a3_label">A3 - Avaliação Presencial Substitutiva da A2</string>
+    <string name="a3_hint">Digite a nota A3</string>
+    <string name="a3_description">Nota entre 0 e 10 (aceita decimais: ex: 6,0 ou 6.0)</string>
+    <string name="calculate_button">Calcular Média</string>
+    <string name="validation_message_a2_a3">É necessário preencher A2 ou A3!</string>
+    <string name="validation_message_a1">É necessário preencher A1!</string>
+    <string name="validation_message_all">É necessário preencher A1 e A2 ou A3!</string>
+    <string name="result_section">Resultado:</string>
+    <string name="nfp_label">Nota Final (NFp)</string>
+    <string name="tooltip">(?)</string>
+    <string name="formula_dialog_title">Fórmula de Cálculo</string>
+    <string name="ok">OK</string>
     <string name="approved">Aprovado</string>
     <string name="failed">Reprovado</string>
+    <string name="a1_required">A1 é obrigatório!</string>
+    <string name="a1_range_error">A nota da A1 deve estar entre 0 e 10!</string>
+    <string name="a1_invalid_number">A1 deve ser um número válido!</string>
+    <string name="a2_range_error">A nota da A2 deve estar entre 0 e 10!</string>
+    <string name="a2_invalid_number">A2 deve ser um número válido!</string>
+    <string name="a3_range_error">A nota da A3 deve estar entre 0 e 10!</string>
+    <string name="a3_invalid_number">A3 deve ser um número válido!</string>
+    <string name="formula_dialog_content" tools:ignore="MissingTranslation">Se A1 diferente de 0 E (A2 ou A3) é maior ou igual à 5,0:\n
+ NFp = (A1 × 0,4) + (A2 ou A3 × 0,6)\n\n
+Se A1 igual à 0 OU (A2 e A3) maior do que 5,0:\n
+ NFp = (A1 × 0,4) + (A2 ou A3 × 0,6) ÷ 2\n\n
+
+Aprovação\n
+• Se A1 igual à 0: Reprovado automaticamente\n
+• Se NFp maior OU igual à 6,0: Aprovado\n
+• Se NFp menor que 6,0: Reprovado\n\n
+
+Quando A2 e A3 estão preenchidos, usa-se a maior nota.\n</string>
+    <string name="formula_source_title">Fonte da fórmula de cálculo</string>
+    <string name="formula_source_url">https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/404306_383891/PDF/manual_ead.pdf</string>
 </resources>
