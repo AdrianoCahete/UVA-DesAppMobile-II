@@ -9,17 +9,29 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.material.navigation.NavigationView;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private TextView textViewQuestionMark;
+    private ImageView imageViewHamburger;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +46,33 @@ public class MainActivity extends AppCompatActivity {
 
         initializeViews();
         setupNavbar();
+        setupNavigationDrawer();
         loadCalculatorFragment(savedInstanceState);
     }
 
     private void initializeViews() {
         textViewQuestionMark = findViewById(R.id.textViewQuestionMark);
+        imageViewHamburger = findViewById(R.id.imageViewHamburger);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
     }
 
     private void setupNavbar() {
         textViewQuestionMark.setOnClickListener(v -> showDeveloperPopup());
+        imageViewHamburger.setOnClickListener(v -> {
+            if (drawerLayout.isDrawerOpen(navigationView)) {
+                drawerLayout.closeDrawer(navigationView);
+            } else {
+                drawerLayout.openDrawer(navigationView);
+            }
+        });
+    }
+
+    private void setupNavigationDrawer() {
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // Set default selection
+        navigationView.setCheckedItem(R.id.nav_calculator);
     }
 
     private void loadCalculatorFragment(Bundle savedInstanceState) {
@@ -51,6 +81,29 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container, new CalculatorFragment())
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment selectedFragment = null;
+
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_calculator) {
+            selectedFragment = new CalculatorFragment();
+        } else if (itemId == R.id.nav_perfil) {
+            selectedFragment = new PerfilFragment();
+        } else if (itemId == R.id.nav_materias) {
+            selectedFragment = new MateriasFragment();
+        }
+
+        if (selectedFragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, selectedFragment)
+                    .commit();
+        }
+
+        drawerLayout.closeDrawer(navigationView);
+        return true;
     }
 
     private void showDeveloperPopup() {
