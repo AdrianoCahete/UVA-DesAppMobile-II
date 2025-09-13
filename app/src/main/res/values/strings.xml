@@ -1,6 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">MediaCalc</string>
 
+    <!-- Navbar -->
+    <string name="question_mark_icon">?</string>
+    <string name="navbar_popup_title">Sobre o Desenvolvedor</string>
+    <string name="navbar_popup_message">Esta aplicação foi desenvolvida por Adriano Cahete.\n\nVisite meu website para mais informações sobre meus projetos.</string>
+    <string name="visit_button">Visitar</string>
+    <string name="close_button">Fechar</string>
+    <string name="menu_description">Menu</string>
+
+    <!-- Navigation Drawer -->
+    <string name="nav_header_login">Login</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_calculator">Calculadora</string>
+    <string name="menu_perfil">Perfil</string>
+    <string name="menu_materias">Matérias</string>
+
     <string name="calculator_title">Calculadora de Média</string>
     <string name="a1_label">A1 - Média das Avaliações On-line (Obrigatório)</string>
     <string name="a1_hint">Digite a nota A1</string>
