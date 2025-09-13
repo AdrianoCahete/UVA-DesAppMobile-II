@@ -1,7 +1,8 @@
-// Criado por Adriano Cahete - https://adrianocahete.dev
+// Criado por Adriano Cahete - <https://adrianocahete.dev> @ 2025
 // Projeto MediaCalc - [UVA] Calculadora de Média
 //
 // Codigo fonte e git history: https://github.com/AdrianoCahete/UVA-DesAppMobile-II
+
 package dev.adrianocahete.mediacalc;
 
 import android.app.AlertDialog;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.media_calc);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void validateFields() {
+        // TODO: Verificar se tem forma mais simples de fazer isso...
         String a1Text = editTextA1.getText().toString().trim();
         String a2Text = editTextA2.getText().toString().trim();
         String a3Text = editTextA3.getText().toString().trim();
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         boolean hasValidA2OrA3 = (!TextUtils.isEmpty(a2Text) && isValidNumber(a2Text)) ||
                 (!TextUtils.isEmpty(a3Text) && isValidNumber(a3Text));
 
+        // TODO: Mover pra switch case?
         if (!isA1Valid && (TextUtils.isEmpty(a2Text) && TextUtils.isEmpty(a3Text))) {
             textViewValidation.setText(getString(R.string.validation_message_all));
             textViewValidation.setVisibility(android.view.View.VISIBLE);
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // TODO: Trocar pra um ícone decente
     private void showFormulaDialog() {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.formula_dialog_title))
@@ -161,8 +165,10 @@ public class MainActivity extends AppCompatActivity {
         String a2Text = editTextA2.getText().toString().trim().replace(",", ".");
         String a3Text = editTextA3.getText().toString().trim().replace(",", ".");
 
-        double a2 = 0, a3 = 0;
-        boolean hasA2 = false, hasA3 = false;
+        double a2 = 0;
+        double a3 = 0;
+        boolean hasA2 = false;
+        boolean hasA3 = false;
         if (!TextUtils.isEmpty(a2Text)) {
             try {
                 a2 = Double.parseDouble(a2Text);
