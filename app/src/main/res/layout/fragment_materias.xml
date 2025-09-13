@@ -3,28 +3,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:padding="16dp">
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/ic_school"
-        android:layout_marginBottom="16dp" />
-
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Matérias"
+        android:text="@string/materias_title"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Esta é a tela de Matérias"
-        android:textSize="16sp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/buttonAddCourse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/add_course_button"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/buttonResyncApi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/resync_api_button"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            style="@style/Widget.Material3.Button.TextButton" />
+
+    </LinearLayout>
+
+    <!-- Courses List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCourses"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/textViewEmptyState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_courses_message"
+
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:visibility="gone" />
+
         android:gravity="center" />
 
 </LinearLayout>
