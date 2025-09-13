@@ -1,3 +1,8 @@
+// Criado por Adriano Cahete - <https://adrianocahete.dev> @ 2025
+// Projeto MediaCalc - [UVA] Calculadora de Média
+//
+// Codigo fonte e git history: https://github.com/AdrianoCahete/UVA-DesAppMobile-II
+
 package dev.adrianocahete.mediacalc;
 
 import android.app.AlertDialog;
@@ -73,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupNavigationDrawer() {
         navigationView.setNavigationItemSelectedListener(this);
         navigationMenu = navigationView.getMenu();
-
-        // Set default selection to Profile
         navigationView.setCheckedItem(R.id.nav_perfil);
     }
 
@@ -84,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean guestMode = intent.getBooleanExtra("guest_mode", false);
 
         if (showProfile) {
-            // Navigate to profile fragment
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new PerfilFragment())
                     .commit();
@@ -94,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void loadInitialFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null && !getIntent().getBooleanExtra("show_profile", false)) {
-            // Default to Profile instead of Calculator
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new PerfilFragment())
                     .commit();
@@ -156,14 +157,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             textViewEmail.setVisibility(View.GONE);
         }
 
-        // Update menu visibility when user data changes
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         User user = databaseHelper.getUser();
         updateMenuVisibility(user);
     }
 
     private void updateNavigationHeaderOnStart() {
-        // Check if user exists in database and update header accordingly
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         User user = databaseHelper.getUser();
 
@@ -172,20 +171,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView textViewEmail = headerView.findViewById(R.id.textViewEmail);
 
         if (user != null) {
-            // User exists - show user data
             textViewName.setText(user.getNome());
             textViewEmail.setText(user.getMatricula());
             textViewEmail.setVisibility(View.VISIBLE);
             textViewName.setVisibility(View.VISIBLE);
 
-            // Enable Matérias menu if user has Nome, Matricula or API_KEY
             updateMenuVisibility(user);
         } else {
-            // No user - hide name and email completely
             textViewName.setVisibility(View.GONE);
             textViewEmail.setVisibility(View.GONE);
 
-            // Disable Matérias menu
             updateMenuVisibility(null);
         }
     }
@@ -194,31 +189,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem materiasItem = navigationMenu.findItem(R.id.nav_materias);
 
         if (user != null) {
-            // Enable Matérias if user has Nome, Matricula or API_KEY filled
             boolean hasRequiredData = !TextUtils.isEmpty(user.getNome()) ||
                                     !TextUtils.isEmpty(user.getMatricula()) ||
                                     !TextUtils.isEmpty(user.getApiKey());
             materiasItem.setEnabled(hasRequiredData);
             materiasItem.setVisible(hasRequiredData);
         } else {
-            // No user - disable Matérias
             materiasItem.setEnabled(false);
             materiasItem.setVisible(false);
         }
     }
 
     private void callNotificationsEndpoint() {
-        // Call notifications endpoint when user opens the app
-        // Using example.com API for now
         // TODO: Replace with actual notifications API URL when provided
-
-        // This is a placeholder for the notifications API call
-        // Implementation will use HTTP client like OkHttp or Volley
-        // Example: NotificationService.getNotifications("https://example.com/api/notifications");
     }
 
     public void onSyncButtonClicked() {
-        // Called when user clicks sync from API
         callNotificationsEndpoint();
     }
 

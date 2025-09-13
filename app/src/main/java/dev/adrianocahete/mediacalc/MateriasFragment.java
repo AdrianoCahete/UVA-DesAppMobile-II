@@ -50,11 +50,9 @@ public class MateriasFragment extends Fragment {
         setupDatabase();
         setupButtons();
 
-        // Initialize executor for background tasks
         executor = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
 
-        // Check if user has API key and call endpoint if available
         checkApiKeyAndLoadCourses();
 
         return view;
@@ -77,7 +75,6 @@ public class MateriasFragment extends Fragment {
         buttonAddCourse.setOnClickListener(v -> showAddCourseDialog());
         buttonResyncApi.setOnClickListener(v -> resyncFromApi());
 
-        // Show/hide resync button based on API key availability
         updateResyncButtonVisibility();
     }
 
@@ -91,21 +88,17 @@ public class MateriasFragment extends Fragment {
         User user = databaseHelper.getUser();
 
         if (user != null && !TextUtils.isEmpty(user.getApiKey())) {
-            // User has API key - call endpoint for materias
             callMateriasEndpoint(user.getApiKey());
         } else {
-            // No API key - just load existing courses
             loadCourses();
         }
     }
 
     private void callMateriasEndpoint(String apiKey) {
-        // Show loading message
         Toast.makeText(getContext(), getString(R.string.syncing_api), Toast.LENGTH_SHORT).show();
 
         executor.execute(() -> {
             try {
-                // Call materias endpoint using example.com for now
                 // TODO: Replace with actual Canvas API URL when provided
                 URL url = new URL("https://example.com/api/courses");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -123,27 +116,26 @@ public class MateriasFragment extends Fragment {
                     }
                     reader.close();
 
-                    // Process API courses
                     mainHandler.post(() -> {
                         try {
                             processApiCoursesResponse(response.toString());
-                            loadCourses(); // Refresh the list after processing API response
+                            loadCourses();
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Error processing courses: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            loadCourses(); // Still load existing courses
+                            loadCourses();
                         }
                     });
                 } else {
                     mainHandler.post(() -> {
                         Toast.makeText(getContext(), "API sync failed. Loading existing courses.", Toast.LENGTH_SHORT).show();
-                        loadCourses(); // Load existing courses on API failure
+                        loadCourses();
                     });
                 }
                 connection.disconnect();
             } catch (Exception e) {
                 mainHandler.post(() -> {
                     Toast.makeText(getContext(), "Network error. Loading existing courses.", Toast.LENGTH_SHORT).show();
-                    loadCourses(); // Load existing courses on network error
+                    loadCourses();
                 });
             }
         });
@@ -167,10 +159,8 @@ public class MateriasFragment extends Fragment {
         boolean hasApiKey = user != null && !TextUtils.isEmpty(user.getApiKey());
 
         if (hasApiKey) {
-            // User has API key but no courses found
             textViewEmptyState.setText(getString(R.string.no_courses_found));
         } else {
-            // User doesn't have API key
             textViewEmptyState.setText(getString(R.string.no_courses_no_api_key));
         }
     }
@@ -227,20 +217,15 @@ public class MateriasFragment extends Fragment {
             return;
         }
 
-        // Show loading message
         Toast.makeText(getContext(), getString(R.string.syncing_api), Toast.LENGTH_SHORT).show();
 
-        // Call notifications endpoint and sync courses
         callNotificationsAndSync();
-
-        // Perform Canvas API sync
         performCanvasApiSync(user.getApiKey());
     }
 
     private void callNotificationsAndSync() {
         executor.execute(() -> {
             try {
-                // Call notifications endpoint using example.com
                 URL url = new URL("https://example.com/api/notifications");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -256,40 +241,27 @@ public class MateriasFragment extends Fragment {
                     }
                     reader.close();
 
-                    // Process notifications response (placeholder)
-                    mainHandler.post(() -> {
-                        // Handle notifications response on main thread
-                        processNotificationsResponse(response.toString());
-                    });
+                    mainHandler.post(() -> processNotificationsResponse(response.toString()));
                 } else {
-                    mainHandler.post(() -> {
-                        Toast.makeText(getContext(), "Failed to fetch notifications", Toast.LENGTH_SHORT).show();
-                    });
+                    mainHandler.post(() -> Toast.makeText(getContext(), "Failed to fetch notifications", Toast.LENGTH_SHORT).show());
                 }
                 connection.disconnect();
             } catch (Exception e) {
-                mainHandler.post(() -> {
-                    Toast.makeText(getContext(), "Notifications endpoint error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                mainHandler.post(() -> Toast.makeText(getContext(), "Notifications endpoint error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
     }
 
     private void processNotificationsResponse(String response) {
-        // Process notifications response (placeholder implementation)
-        // This would handle any notifications from the API
         try {
             JSONObject jsonResponse = new JSONObject(response);
-            // Process notifications as needed
         } catch (Exception e) {
-            // Handle JSON parsing error
         }
     }
 
     private void performCanvasApiSync(String apiKey) {
         executor.execute(() -> {
             try {
-                // Simulate Canvas API call for now with example.com
                 // TODO: Replace with actual Canvas API URL when provided
                 URL url = new URL("https://example.com/api/courses");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -307,7 +279,6 @@ public class MateriasFragment extends Fragment {
                     }
                     reader.close();
 
-                    // Process API courses
                     mainHandler.post(() -> {
                         try {
                             processApiCoursesResponse(response.toString());
@@ -318,15 +289,11 @@ public class MateriasFragment extends Fragment {
                         }
                     });
                 } else {
-                    mainHandler.post(() -> {
-                        Toast.makeText(getContext(), "API sync failed. Response code: " + responseCode, Toast.LENGTH_SHORT).show();
-                    });
+                    mainHandler.post(() -> Toast.makeText(getContext(), "API sync failed. Response code: " + responseCode, Toast.LENGTH_SHORT).show());
                 }
                 connection.disconnect();
             } catch (Exception e) {
-                mainHandler.post(() -> {
-                    Toast.makeText(getContext(), "Canvas API error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                mainHandler.post(() -> Toast.makeText(getContext(), "Canvas API error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -344,7 +311,6 @@ public class MateriasFragment extends Fragment {
             int enrollmentTermId = courseJson.optInt("enrollment_term_id", 0);
             String calendarUrl = courseJson.optString("calendar", "");
 
-            // Create course object from API data
             Course apiCourse = new Course();
             apiCourse.setName(courseName);
             apiCourse.setCourseCode(courseCode);
@@ -353,18 +319,14 @@ public class MateriasFragment extends Fragment {
             apiCourse.setCalendarUrl(calendarUrl);
             apiCourse.setSource("api");
 
-            // Check if course already exists
             Course existingCourse = findExistingCourse(courseId, courseName);
 
             if (existingCourse != null && "api".equals(existingCourse.getSource())) {
-                // Update existing API course - DO NOT DELETE
                 apiCourse.setId(existingCourse.getId());
                 databaseHelper.updateCourse(apiCourse);
             } else if (existingCourse == null) {
-                // Insert new course from API - DO NOT DELETE existing courses
                 databaseHelper.createCourse(apiCourse);
             }
-            // Never delete courses - preserve both user-created and existing API courses
         }
     }
 
@@ -386,7 +348,6 @@ public class MateriasFragment extends Fragment {
     }
 
     private void onCourseDelete(Course course) {
-        // Only allow deletion of user-created courses
         if (!"user".equals(course.getSource())) {
             Toast.makeText(getContext(), getString(R.string.cannot_delete_api_course), Toast.LENGTH_SHORT).show();
             return;

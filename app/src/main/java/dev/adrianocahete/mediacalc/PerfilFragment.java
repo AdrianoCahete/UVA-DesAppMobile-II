@@ -77,7 +77,6 @@ public class PerfilFragment extends Fragment {
         }
 
         if (currentUser != null) {
-            // Update existing user - preserve API data restrictions
             String changedBy = currentUser.isDataFromApi() ? "api" : "user";
             int result = databaseHelper.updateUser(currentUser.getId(), nome, matricula,
                     currentUser.getAvatarUrl(), apiKey, changedBy);
@@ -88,20 +87,17 @@ public class PerfilFragment extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.profile_saved_success), Toast.LENGTH_SHORT).show();
                 updateNavigationHeader(nome, matricula);
 
-                // Navigate to Materias after saving
                 navigateToMaterias();
             } else {
                 Toast.makeText(getContext(), getString(R.string.profile_save_error), Toast.LENGTH_SHORT).show();
             }
         } else {
-            // Create new user
             long result = databaseHelper.createUser(nome, matricula, apiKey);
             if (result != -1) {
                 currentUser = databaseHelper.getUser();
                 Toast.makeText(getContext(), getString(R.string.profile_created_success), Toast.LENGTH_SHORT).show();
                 updateNavigationHeader(nome, matricula);
 
-                // Navigate to Materias after creating profile
                 navigateToMaterias();
             } else {
                 Toast.makeText(getContext(), getString(R.string.profile_create_error), Toast.LENGTH_SHORT).show();
@@ -133,12 +129,10 @@ public class PerfilFragment extends Fragment {
 
     private void navigateToMaterias() {
         if (getActivity() != null) {
-            // Switch to Materias fragment
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new MateriasFragment())
                     .commit();
 
-            // Update navigation drawer selection
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).updateNavigationSelection(R.id.nav_materias);
             }

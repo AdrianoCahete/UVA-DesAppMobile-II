@@ -104,6 +104,8 @@ Quando A2 e A3 estão preenchidos, usa-se a maior nota.\n</string>
     <string name="add_course_button">Adicionar Matéria</string>
     <string name="resync_api_button">Sincronizar API</string>
     <string name="no_courses_message">Nenhuma matéria encontrada.\nClique em "Adicionar Matéria" para começar.</string>
+    <string name="no_courses_found">Não há matérias</string>
+    <string name="no_courses_no_api_key">Não há matérias\n\nCadastre ou adicione uma chave de API em configurações</string>
     <string name="add_course_dialog_title">Adicionar Matéria</string>
     <string name="course_name_hint">Nome da matéria</string>
     <string name="course_code_hint">Código da matéria (opcional)</string>
