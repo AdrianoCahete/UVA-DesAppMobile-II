@@ -8,4 +8,3 @@
         android:startColor="@color/primary_light"
         android:type="linear" />
 </shape>
-
