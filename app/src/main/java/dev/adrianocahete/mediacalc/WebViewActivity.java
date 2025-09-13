@@ -1,8 +1,3 @@
-// Criado por Adriano Cahete - <https://adrianocahete.dev> @ 2025
-// Projeto MediaCalc - [UVA] Calculadora de Média
-//
-// Codigo fonte e git history: https://github.com/AdrianoCahete/UVA-DesAppMobile-II
-
 package dev.adrianocahete.mediacalc;
 
 import android.content.Intent;
