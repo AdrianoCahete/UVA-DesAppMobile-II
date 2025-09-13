@@ -1,8 +1,3 @@
-// Criado por Adriano Cahete - <https://adrianocahete.dev> @ 2025
-// Projeto MediaCalc - [UVA] Calculadora de Média
-//
-// Codigo fonte e git history: https://github.com/AdrianoCahete/UVA-DesAppMobile-II
-
 package dev.adrianocahete.mediacalc;
 
 import android.app.AlertDialog;
@@ -107,107 +102,69 @@ public class CalculatorFragment extends Fragment {
     }
 
     private boolean isValidNumber(String text) {
-        if (TextUtils.isEmpty(text)) return false;
-
         try {
-            String normalizedText = text.replace(",", ".");
-            double value = Double.parseDouble(normalizedText);
-            return value >= 0 && value <= 10;
+            double value = Double.parseDouble(text);
+            return value >= 0.0 && value <= 10.0;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
+    private void calculateGrade() {
+        String a1Text = editTextA1.getText().toString().trim();
+        String a2Text = editTextA2.getText().toString().trim();
+        String a3Text = editTextA3.getText().toString().trim();
+
+        if (TextUtils.isEmpty(a1Text)) {
+            Toast.makeText(getContext(), getString(R.string.a1_required), Toast.LENGTH_SHORT).show();
+            editTextA1.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(a2Text) && TextUtils.isEmpty(a3Text)) {
+            Toast.makeText(getContext(), getString(R.string.a2_or_a3_required), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            double a1 = Double.parseDouble(a1Text);
+            double a2 = TextUtils.isEmpty(a2Text) ? 0.0 : Double.parseDouble(a2Text);
+            double a3 = TextUtils.isEmpty(a3Text) ? 0.0 : Double.parseDouble(a3Text);
+
+            if (!isValidGrade(a1) || (!TextUtils.isEmpty(a2Text) && !isValidGrade(a2)) ||
+                    (!TextUtils.isEmpty(a3Text) && !isValidGrade(a3))) {
+                Toast.makeText(getContext(), getString(R.string.invalid_grade_range), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double media = (a1 * 4 + a2 * 3 + a3 * 3) / 10.0;
+
+            textViewResult.setText(String.format(Locale.getDefault(), "%.2f", media));
+            textViewResult.setVisibility(View.VISIBLE);
+
+            if (media >= 7.0) {
+                textViewApproved.setText(getString(R.string.approved));
+                textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            } else {
+                textViewApproved.setText(getString(R.string.not_approved));
+                textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+            }
+            textViewApproved.setVisibility(View.VISIBLE);
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(getContext(), getString(R.string.invalid_number_format), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isValidGrade(double grade) {
+        return grade >= 0.0 && grade <= 10.0;
+    }
+
     private void showFormulaDialog() {
         new AlertDialog.Builder(getContext())
                 .setTitle(getString(R.string.formula_dialog_title))
-                .setMessage(getString(R.string.formula_dialog_content))
-                .setNeutralButton(getString(R.string.formula_source_title), (dialog, which) -> openFormulaSource())
-                .setPositiveButton(getString(R.string.ok), null)
+                .setMessage(getString(R.string.formula_dialog_message))
+                .setPositiveButton(getString(R.string.ok_button), null)
                 .show();
-    }
-
-    private void openFormulaSource() {
-        String url = getString(R.string.formula_source_url);
-
-        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
-        intent.setData(android.net.Uri.parse(url));
-        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
-    private void calculateGrade() {
-        String a1Text = editTextA1.getText().toString().trim().replace(",", ".");
-        if (TextUtils.isEmpty(a1Text)) {
-            Toast.makeText(getContext(), getString(R.string.a1_required), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        double a1;
-        try {
-            a1 = Double.parseDouble(a1Text);
-            if (a1 < 0 || a1 > 10) {
-                Toast.makeText(getContext(), getString(R.string.a1_range_error), Toast.LENGTH_SHORT).show();
-                return;
-            }
-        } catch (NumberFormatException e) {
-            Toast.makeText(getContext(), getString(R.string.a1_invalid_number), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String a2Text = editTextA2.getText().toString().trim().replace(",", ".");
-        String a3Text = editTextA3.getText().toString().trim().replace(",", ".");
-
-        double a2 = 0, a3 = 0;
-        boolean hasA2 = false, hasA3 = false;
-
-        if (!TextUtils.isEmpty(a2Text)) {
-            try {
-                a2 = Double.parseDouble(a2Text);
-                if (a2 < 0 || a2 > 10) {
-                    Toast.makeText(getContext(), getString(R.string.a2_range_error), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                hasA2 = true;
-            } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), getString(R.string.a2_invalid_number), Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        if (!TextUtils.isEmpty(a3Text)) {
-            try {
-                a3 = Double.parseDouble(a3Text);
-                if (a3 < 0 || a3 > 10) {
-                    Toast.makeText(getContext(), getString(R.string.a3_range_error), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                hasA3 = true;
-            } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), getString(R.string.a3_invalid_number), Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        if (!hasA2 && !hasA3) {
-            Toast.makeText(getContext(), getString(R.string.validation_message_a2_a3), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        double secondGrade = hasA2 && hasA3 ? Math.max(a2, a3) : (hasA2 ? a2 : a3);
-        double nfp = (a1 * 0.4) + (secondGrade * 0.6);
-
-        textViewResult.setText(String.format(Locale.getDefault(), "%.2f", nfp));
-
-        if (a1 == 0) {
-            textViewApproved.setText(getString(R.string.failed));
-            textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-        } else if (nfp >= 6.0) {
-            textViewApproved.setText(getString(R.string.approved));
-            textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
-        } else {
-            textViewApproved.setText(getString(R.string.failed));
-            textViewApproved.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-        }
     }
 }
