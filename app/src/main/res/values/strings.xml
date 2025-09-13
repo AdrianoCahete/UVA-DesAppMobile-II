@@ -17,6 +17,40 @@
     <string name="menu_perfil">Perfil</string>
     <string name="menu_materias">Matérias</string>
 
+    <!-- Welcome Screen -->
+    <string name="app_logo_description">Logo do MediaCalc</string>
+    <string name="login_button">Login</string>
+    <string name="continue_without_login">Entrar sem login</string>
+    <string name="login_dialog_title">Login UVA</string>
+    <string name="login_dialog_message">Você será redirecionado para o sistema da UVA para fazer login com suas credenciais institucionais.\n\nApós o login, você retornará automaticamente ao aplicativo.</string>
+    <string name="proceed_button">Prosseguir</string>
+    <string name="uva_login_url">https://portalaluno.uva.br/Aluno/PortalAluno</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_title">Perfil do Usuário</string>
+    <string name="profile_name_hint">Nome completo</string>
+    <string name="profile_email_hint">E-mail</string>
+    <string name="profile_matricula_hint">Matrícula</string>
+    <string name="profile_api_key_hint">Token de Acesso (API Key)</string>
+    <string name="profile_api_key_instructions">Para obter seu token: Portal do Aluno > Plataforma Virtual > Contas > Configurações > Integrações aprovadas > Novo token de acesso. O token gerado provavelmente começará com "9255~".</string>
+    <string name="profile_save_button">Salvar</string>
+    <string name="profile_saved_success">Perfil salvo com sucesso!</string>
+    <string name="profile_save_error">Erro ao salvar perfil</string>
+    <string name="profile_created_success">Perfil criado com sucesso!</string>
+    <string name="profile_create_error">Erro ao criar perfil</string>
+    <string name="profile_name_required">Nome é obrigatório</string>
+    <string name="profile_email_required">E-mail é obrigatório</string>
+    <string name="profile_matricula_required">Matrícula é obrigatória</string>
+    <string name="profile_email_invalid">E-mail inválido</string>
+    <string name="name_required">Nome é obrigatório</string>
+    <string name="email_required">E-mail é obrigatório</string>
+
+    <!-- WebView -->
+    <string name="webview_back">Voltar</string>
+    <string name="webview_forward">Avançar</string>
+    <string name="webview_close">Fechar</string>
+
+    <!-- Calculator -->
     <string name="calculator_title">Calculadora de Média</string>
     <string name="a1_label">A1 - Média das Avaliações On-line (Obrigatório)</string>
     <string name="a1_hint">Digite a nota A1</string>
@@ -35,10 +69,16 @@
     <string name="nfp_label">Nota Final (NFp)</string>
     <string name="tooltip">(?)</string>
     <string name="formula_dialog_title">Fórmula de Cálculo</string>
+    <string name="formula_dialog_message">NFp = (A1 × 4 + A2 × 3 + A3 × 3) ÷ 10\n\nA1 é obrigatória (peso 4)\nApenas uma das avaliações A2 ou A3 é necessária (peso 3 cada)\n\nAprovação: NFp ≥ 7,0</string>
     <string name="ok">OK</string>
+    <string name="ok_button">OK</string>
     <string name="approved">Aprovado</string>
+    <string name="not_approved">Reprovado</string>
     <string name="failed">Reprovado</string>
     <string name="a1_required">A1 é obrigatório!</string>
+    <string name="a2_or_a3_required">É necessário preencher A2 ou A3!</string>
+    <string name="invalid_grade_range">As notas devem estar entre 0 e 10!</string>
+    <string name="invalid_number_format">Formato de número inválido!</string>
     <string name="a1_range_error">A nota da A1 deve estar entre 0 e 10!</string>
     <string name="a1_invalid_number">A1 deve ser um número válido!</string>
     <string name="a2_range_error">A nota da A2 deve estar entre 0 e 10!</string>
@@ -58,4 +98,29 @@ Aprovação\n
 Quando A2 e A3 estão preenchidos, usa-se a maior nota.\n</string>
     <string name="formula_source_title">Fonte da fórmula</string>
     <string name="formula_source_url">https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/404306_383891/PDF/manual_ead.pdf</string>
+
+    <!-- Matérias Screen -->
+    <string name="materias_title">Matérias</string>
+    <string name="add_course_button">Adicionar Matéria</string>
+    <string name="resync_api_button">Sincronizar API</string>
+    <string name="no_courses_message">Nenhuma matéria encontrada.\nClique em "Adicionar Matéria" para começar.</string>
+    <string name="add_course_dialog_title">Adicionar Matéria</string>
+    <string name="course_name_hint">Nome da matéria</string>
+    <string name="course_code_hint">Código da matéria (opcional)</string>
+    <string name="add_button">Adicionar</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="delete_button">Excluir</string>
+    <string name="course_name_required">Nome da matéria é obrigatório</string>
+    <string name="course_added_success">Matéria adicionada com sucesso!</string>
+    <string name="course_add_error">Erro ao adicionar matéria</string>
+    <string name="api_key_not_configured">Chave API não configurada</string>
+    <string name="syncing_api">Sincronizando com a API...</string>
+    <string name="api_sync_success">Sincronização concluída com sucesso!</string>
+    <string name="api_sync_placeholder">Sincronização com API - Em desenvolvimento</string>
+    <string name="course_details_placeholder">Detalhes da matéria:</string>
+    <string name="cannot_delete_api_course">Não é possível excluir matérias da API</string>
+    <string name="delete_course_title">Excluir Matéria</string>
+    <string name="delete_course_message">Deseja excluir a matéria "%1$s"?</string>
+    <string name="course_deleted_success">Matéria excluída com sucesso!</string>
+    <string name="delete_course">Excluir matéria</string>
 </resources>
