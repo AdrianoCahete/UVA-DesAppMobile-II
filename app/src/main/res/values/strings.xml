@@ -53,6 +53,8 @@
     <!-- Calculator -->
     <string name="calculator_title">Calculadora de Média</string>
     <string name="a1_label">A1 - Média das Avaliações On-line (Obrigatório)</string>
+    <string name="select_materia">Selecione uma matéria</string>
+    <string name="no_materia_selected">Nenhuma matéria selecionada</string>
     <string name="a1_hint">Digite a nota A1</string>
     <string name="a1_description">Nota entre 0 e 10 (aceita decimais: ex: 7,8 ou 7.8)</string>
     <string name="a2_label">A2 - Avaliação Presencial Regular</string>

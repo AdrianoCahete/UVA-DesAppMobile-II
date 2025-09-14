@@ -2,14 +2,19 @@ package dev.adrianocahete.mediacalc;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,26 +22,48 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class CalculatorFragment extends Fragment {
 
+    private Spinner spinnerMaterias;
     private EditText editTextA1, editTextA2, editTextA3;
     private TextView textViewResult, textViewApproved, textViewTooltip, textViewValidation;
     private Button buttonCalculate;
+
+    private DatabaseHelper databaseHelper;
+    private List<Course> materias;
+    private Course selectedMateria;
+    private ExecutorService executor;
+    private Handler mainHandler;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calculator, container, false);
+
         initializeViews(view);
+        setupDatabase();
+        setupExecutor();
+        setupMateriasSpinner();
         setupCalculateButton();
         setupTooltip();
         setupTextWatchers();
+
         return view;
     }
 
     private void initializeViews(View view) {
+        spinnerMaterias = view.findViewById(R.id.spinnerMaterias);
         editTextA1 = view.findViewById(R.id.editTextA1);
         editTextA2 = view.findViewById(R.id.editTextA2);
         editTextA3 = view.findViewById(R.id.editTextA3);
@@ -45,6 +72,106 @@ public class CalculatorFragment extends Fragment {
         textViewTooltip = view.findViewById(R.id.textViewTooltip);
         textViewValidation = view.findViewById(R.id.textViewValidation);
         buttonCalculate = view.findViewById(R.id.buttonCalculate);
+    }
+
+    private void setupDatabase() {
+        databaseHelper = new DatabaseHelper(getContext());
+    }
+
+    private void setupExecutor() {
+        executor = Executors.newSingleThreadExecutor();
+        mainHandler = new Handler(Looper.getMainLooper());
+    }
+
+    private void setupMateriasSpinner() {
+        loadMaterias();
+
+        spinnerMaterias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    selectedMateria = materias.get(position - 1);
+                    onMateriaSelected(selectedMateria);
+                } else {
+                    selectedMateria = null;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedMateria = null;
+            }
+        });
+    }
+
+    private void loadMaterias() {
+        materias = databaseHelper.getAllCourses();
+
+        List<String> materiaNames = new ArrayList<>();
+        materiaNames.add(getString(R.string.select_materia));
+
+        for (Course materia : materias) {
+            materiaNames.add(materia.getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, materiaNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMaterias.setAdapter(adapter);
+    }
+
+    private void onMateriaSelected(Course materia) {
+        User user = databaseHelper.getUser();
+
+        if (user != null && !TextUtils.isEmpty(user.getApiKey())) {
+            callCourseEndpoint(materia, user.getApiKey());
+        }
+    }
+
+    private void callCourseEndpoint(Course course, String apiKey) {
+        executor.execute(() -> {
+            try {
+                // TODO: Replace with actual course details API endpoint when provided
+                String courseId = course.getCourseCode();
+                URL url = new URL("https://example.com/api/courses/" + courseId);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+                connection.setRequestProperty("Accept", "application/json");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+
+                    mainHandler.post(() -> {
+                        // TODO: Process course details response and populate grades if available
+                        processCourseDetailsResponse(response.toString(), course);
+                    });
+                } else {
+                    mainHandler.post(() -> {
+                        Toast.makeText(getContext(), "Falha ao carregar dados da matéria", Toast.LENGTH_SHORT).show();
+                    });
+                }
+                connection.disconnect();
+            } catch (Exception e) {
+                mainHandler.post(() -> {
+                    Toast.makeText(getContext(), "Erro de rede: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    private void processCourseDetailsResponse(String response, Course course) {
+        // TODO: Parse JSON response and extract grades data
+        // This would populate the A1, A2, A3 fields with existing grades from Canvas API
+        // For now, just show a placeholder message
+        Toast.makeText(getContext(), "Matéria selecionada: " + course.getName(), Toast.LENGTH_SHORT).show();
     }
 
     private void setupCalculateButton() {
@@ -166,5 +293,19 @@ public class CalculatorFragment extends Fragment {
                 .setMessage(getString(R.string.formula_dialog_message))
                 .setPositiveButton(getString(R.string.ok_button), null)
                 .show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadMaterias();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdown();
+        }
     }
 }

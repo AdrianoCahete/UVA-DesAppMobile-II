@@ -8,8 +8,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,6 +24,7 @@ public class WebViewActivity extends AppCompatActivity {
     private ImageButton buttonBack;
     private ImageButton buttonForward;
     private ProgressBar progressBar;
+    private TextView textViewInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,8 @@ public class WebViewActivity extends AppCompatActivity {
         initializeViews();
         setupWebView();
         setupButtons();
+        setupInstructions();
+        setupBackPressedHandler();
         loadUrl();
     }
 
@@ -46,6 +51,7 @@ public class WebViewActivity extends AppCompatActivity {
         buttonBack = findViewById(R.id.buttonBack);
         buttonForward = findViewById(R.id.buttonForward);
         progressBar = findViewById(R.id.progressBar);
+        textViewInstructions = findViewById(R.id.textViewInstructions);
     }
 
     private void setupWebView() {
@@ -74,7 +80,6 @@ public class WebViewActivity extends AppCompatActivity {
 
     private void setupButtons() {
         buttonClose.setOnClickListener(v -> {
-            // Return to MainActivity and navigate to Profile
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("show_profile", true);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -95,11 +100,18 @@ public class WebViewActivity extends AppCompatActivity {
         });
     }
 
+    private void setupInstructions() {
+        if (textViewInstructions != null) {
+            String instructionsTitle = getString(R.string.api_key_step_by_step_title);
+            String instructionsText = getString(R.string.api_key_instructions_detailed);
+            textViewInstructions.setText(instructionsTitle + "\n\n" + instructionsText);
+            textViewInstructions.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void updateNavigationButtons() {
         buttonBack.setEnabled(webView.canGoBack());
         buttonForward.setEnabled(webView.canGoForward());
-
-        // Update button appearance based on enabled state
         buttonBack.setAlpha(webView.canGoBack() ? 1.0f : 0.5f);
         buttonForward.setAlpha(webView.canGoForward() ? 1.0f : 0.5f);
     }
@@ -108,15 +120,21 @@ public class WebViewActivity extends AppCompatActivity {
         String url = getIntent().getStringExtra("url");
         if (url != null && !url.isEmpty()) {
             webView.loadUrl(url);
+        } else {
+            webView.loadUrl(getString(R.string.uva_login_url));
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
-        }
+    private void setupBackPressedHandler() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                } else {
+                    finish();
+                }
+            }
+        });
     }
 }

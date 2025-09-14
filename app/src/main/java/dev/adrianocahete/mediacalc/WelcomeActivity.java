@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -53,17 +55,27 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void proceedToUVALogin() {
-        String url = getString(R.string.uva_login_url);
-        Intent intent = new Intent(this, WebViewActivity.class);
-        intent.putExtra("url", url);
-        startActivity(intent);
+        setLoadingState(true);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            String url = getString(R.string.uva_login_url);
+            Intent intent = new Intent(this, WebViewActivity.class);
+            intent.putExtra("url", url);
+            startActivity(intent);
+            setLoadingState(false);
+        }, 500);
+    }
+
+    private void setLoadingState(boolean isLoading) {
+        buttonLogin.setEnabled(!isLoading);
+        buttonLogin.setText(isLoading ? getString(R.string.loading) : getString(R.string.login_button));
+        textViewContinueWithoutLogin.setEnabled(!isLoading);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Check if user came back from browser (simplified approach)
-        // In a real app, you'd implement proper OAuth flow
+        setLoadingState(false);
     }
 
     private void continueWithoutLogin() {
