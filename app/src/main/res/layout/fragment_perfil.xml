@@ -80,7 +80,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/profile_save_button"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/dark_blue" />
 
         <!-- Open Portal Button -->
         <Button
@@ -88,7 +89,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Abrir Portal do Aluno"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            android:backgroundTint="@color/white"
+            style="@style/Widget.Material3.Button.IconButton" />
 
     </LinearLayout>
 

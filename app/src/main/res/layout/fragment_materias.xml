@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/add_course_button"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/dark_blue" />
 
         <Button
             android:id="@+id/buttonResyncApi"
@@ -36,15 +37,18 @@
             android:text="@string/resync_api_button"
             android:layout_marginStart="8dp"
             android:visibility="gone"
+            android:backgroundTint="@color/dark_blue"
             style="@style/Widget.Material3.Button.TextButton" />
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCourses"
+    <ListView
+        android:id="@+id/listViewCourses"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
 
     <TextView
         android:id="@+id/textViewEmptyState"
