@@ -9,14 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -33,7 +32,7 @@ import org.json.JSONObject;
 
 public class MateriasFragment extends Fragment {
 
-    private RecyclerView recyclerViewCourses;
+    private ListView listViewCourses;
     private Button buttonAddCourse;
     private Button buttonResyncApi;
     private TextView textViewEmptyState;
@@ -60,12 +59,10 @@ public class MateriasFragment extends Fragment {
     }
 
     private void initializeViews(View view) {
-        recyclerViewCourses = view.findViewById(R.id.recyclerViewCourses);
+        listViewCourses = view.findViewById(R.id.listViewCourses);
         buttonAddCourse = view.findViewById(R.id.buttonAddCourse);
         buttonResyncApi = view.findViewById(R.id.buttonResyncApi);
         textViewEmptyState = view.findViewById(R.id.textViewEmptyState);
-
-        recyclerViewCourses.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void setupDatabase() {
@@ -154,7 +151,7 @@ public class MateriasFragment extends Fragment {
 
     private void showEmptyState() {
         textViewEmptyState.setVisibility(View.VISIBLE);
-        recyclerViewCourses.setVisibility(View.GONE);
+        listViewCourses.setVisibility(View.GONE);
 
         User user = databaseHelper.getUser();
         boolean hasApiKey = user != null && !TextUtils.isEmpty(user.getApiKey());
@@ -168,11 +165,11 @@ public class MateriasFragment extends Fragment {
 
     private void showCoursesList(List<Course> courses) {
         textViewEmptyState.setVisibility(View.GONE);
-        recyclerViewCourses.setVisibility(View.VISIBLE);
+        listViewCourses.setVisibility(View.VISIBLE);
 
         if (coursesAdapter == null) {
             coursesAdapter = new CoursesAdapter(courses, this::onCourseClick, this::onCourseDelete);
-            recyclerViewCourses.setAdapter(coursesAdapter);
+            listViewCourses.setAdapter(coursesAdapter);
         } else {
             coursesAdapter.updateCourses(courses);
         }

@@ -3,19 +3,18 @@ package dev.adrianocahete.mediacalc;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
-public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CourseViewHolder> {
+public class CoursesAdapter extends BaseAdapter {
 
     private List<Course> courses;
     private OnCourseClickListener listener;
     private OnCourseDeleteListener deleteListener;
+    private LayoutInflater inflater;
 
     public interface OnCourseClickListener {
         void onCourseClick(Course course);
@@ -31,23 +30,40 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CourseVi
         this.deleteListener = deleteListener;
     }
 
-    @NonNull
     @Override
-    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_course, parent, false);
-        return new CourseViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-        Course course = courses.get(position);
-        holder.bind(course, listener, deleteListener);
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         return courses.size();
+    }
+
+    @Override
+    public Course getItem(int position) {
+        return courses.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return courses.get(position).getId();
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+
+        if (convertView == null) {
+            if (inflater == null) {
+                inflater = LayoutInflater.from(parent.getContext());
+            }
+            convertView = inflater.inflate(R.layout.item_course, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        Course course = getItem(position);
+        holder.bind(course, listener, deleteListener);
+
+        return convertView;
     }
 
     public void updateCourses(List<Course> newCourses) {
@@ -55,7 +71,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CourseVi
         notifyDataSetChanged();
     }
 
-    static class CourseViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder {
         private TextView textViewCourseName;
         private TextView textViewCourseCode;
         private TextView textViewStartsAt;
@@ -64,9 +80,10 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CourseVi
         private TextView textViewGradeFinal;
         private TextView textViewSource;
         private ImageButton buttonDelete;
+        private View itemView;
 
-        public CourseViewHolder(@NonNull View itemView) {
-            super(itemView);
+        public ViewHolder(View itemView) {
+            this.itemView = itemView;
             textViewCourseName = itemView.findViewById(R.id.textViewCourseName);
             textViewCourseCode = itemView.findViewById(R.id.textViewCourseCode);
             textViewStartsAt = itemView.findViewById(R.id.textViewStartsAt);
