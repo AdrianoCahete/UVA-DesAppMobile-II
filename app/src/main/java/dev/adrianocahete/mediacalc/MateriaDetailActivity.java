@@ -1,22 +1,27 @@
 package dev.adrianocahete.mediacalc;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Calendar;
 
 public class MateriaDetailActivity extends AppCompatActivity {
 
     private TextInputEditText editTextCourseName;
     private TextInputEditText editTextCourseCode;
     private TextInputEditText editTextStartsAt;
-    private TextInputEditText editTextType;
+    private TextInputEditText editTextPeriodo;
     private TextInputEditText editTextGradeCurrent;
     private TextInputEditText editTextGradeFinal;
     private Button buttonSave;
@@ -42,11 +47,32 @@ public class MateriaDetailActivity extends AppCompatActivity {
         editTextCourseName = findViewById(R.id.editTextCourseName);
         editTextCourseCode = findViewById(R.id.editTextCourseCode);
         editTextStartsAt = findViewById(R.id.editTextStartsAt);
-        editTextType = findViewById(R.id.editTextType);
+        editTextPeriodo = findViewById(R.id.editTextPeriodo);
         editTextGradeCurrent = findViewById(R.id.editTextGradeCurrent);
         editTextGradeFinal = findViewById(R.id.editTextGradeFinal);
         buttonSave = findViewById(R.id.buttonSave);
         progressBar = findViewById(R.id.progressBar);
+
+        setupDatePicker();
+    }
+
+    private void setupDatePicker() {
+        editTextStartsAt.setOnClickListener(v -> showDatePicker());
+    }
+
+    private void showDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String date = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                    editTextStartsAt.setText(date);
+                }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     private void setupDatabase() {
@@ -80,7 +106,7 @@ public class MateriaDetailActivity extends AppCompatActivity {
         editTextCourseName.setText(course.getName());
         editTextCourseCode.setText(course.getCourseCode());
         editTextStartsAt.setText(course.getStartsAt());
-        editTextType.setText(course.getType());
+        editTextPeriodo.setText(course.getType());
 
         if (course.getGradeCurrent() > 0) {
             editTextGradeCurrent.setText(String.valueOf(course.getGradeCurrent()));
@@ -95,7 +121,7 @@ public class MateriaDetailActivity extends AppCompatActivity {
         editTextCourseName.setEnabled(!isApiCourse);
         editTextCourseCode.setEnabled(!isApiCourse);
         editTextStartsAt.setEnabled(!isApiCourse);
-        editTextType.setEnabled(!isApiCourse);
+        editTextPeriodo.setEnabled(!isApiCourse);
     }
 
     private void setupSaveButton() {
@@ -139,7 +165,7 @@ public class MateriaDetailActivity extends AppCompatActivity {
         course.setName(editTextCourseName.getText().toString().trim());
         course.setCourseCode(editTextCourseCode.getText().toString().trim());
         course.setStartsAt(editTextStartsAt.getText().toString().trim());
-        course.setType(editTextType.getText().toString().trim());
+        course.setType(editTextPeriodo.getText().toString().trim());
 
         String gradeCurrentStr = editTextGradeCurrent.getText().toString().trim();
         if (!TextUtils.isEmpty(gradeCurrentStr)) {

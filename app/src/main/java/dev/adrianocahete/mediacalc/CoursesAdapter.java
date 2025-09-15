@@ -58,6 +58,8 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CourseVi
     static class CourseViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewCourseName;
         private TextView textViewCourseCode;
+        private TextView textViewStartsAt;
+        private TextView textViewPeriodo;
         private TextView textViewGradeCurrent;
         private TextView textViewGradeFinal;
         private TextView textViewSource;
@@ -67,6 +69,8 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CourseVi
             super(itemView);
             textViewCourseName = itemView.findViewById(R.id.textViewCourseName);
             textViewCourseCode = itemView.findViewById(R.id.textViewCourseCode);
+            textViewStartsAt = itemView.findViewById(R.id.textViewStartsAt);
+            textViewPeriodo = itemView.findViewById(R.id.textViewPeriodo);
             textViewGradeCurrent = itemView.findViewById(R.id.textViewGradeCurrent);
             textViewGradeFinal = itemView.findViewById(R.id.textViewGradeFinal);
             textViewSource = itemView.findViewById(R.id.textViewSource);
@@ -75,7 +79,30 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CourseVi
 
         public void bind(Course course, OnCourseClickListener listener, OnCourseDeleteListener deleteListener) {
             textViewCourseName.setText(course.getName());
-            textViewCourseCode.setText(course.getCourseCode());
+
+            // Show course code if available
+            if (course.getCourseCode() != null && !course.getCourseCode().trim().isEmpty()) {
+                textViewCourseCode.setText(course.getCourseCode());
+                textViewCourseCode.setVisibility(View.VISIBLE);
+            } else {
+                textViewCourseCode.setVisibility(View.GONE);
+            }
+
+            // Show start date if available
+            if (course.getStartsAt() != null && !course.getStartsAt().trim().isEmpty()) {
+                textViewStartsAt.setText("Início: " + course.getStartsAt());
+                textViewStartsAt.setVisibility(View.VISIBLE);
+            } else {
+                textViewStartsAt.setVisibility(View.GONE);
+            }
+
+            // Show period (stored in type field) if available
+            if (course.getType() != null && !course.getType().trim().isEmpty()) {
+                textViewPeriodo.setText("Período: " + course.getType());
+                textViewPeriodo.setVisibility(View.VISIBLE);
+            } else {
+                textViewPeriodo.setVisibility(View.GONE);
+            }
 
             // Show current grade if available
             if (course.hasCurrentGrade()) {

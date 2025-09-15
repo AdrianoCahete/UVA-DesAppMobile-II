@@ -49,7 +49,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setTitle(getString(R.string.login_dialog_title))
                 .setMessage(getString(R.string.login_dialog_message))
                 .setPositiveButton(getString(R.string.proceed_button), (dialog, which) -> proceedToUVALogin())
-                .setNegativeButton(getString(R.string.close_button), null)
+                .setNegativeButton(getString(R.string.close_button), (dialog, which) -> continueWithoutLogin())
                 .show();
     }
 
