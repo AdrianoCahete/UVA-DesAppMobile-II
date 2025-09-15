@@ -79,7 +79,16 @@
             android:id="@+id/buttonSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/profile_save_button" />
+            android:text="@string/profile_save_button"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Open Portal Button -->
+        <Button
+            android:id="@+id/buttonOpenPortal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Abrir Portal do Aluno"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
 
     </LinearLayout>
 

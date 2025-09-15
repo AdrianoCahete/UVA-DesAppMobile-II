@@ -8,7 +8,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -24,7 +23,6 @@ public class WebViewActivity extends AppCompatActivity {
     private ImageButton buttonBack;
     private ImageButton buttonForward;
     private ProgressBar progressBar;
-    private TextView textViewInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,6 @@ public class WebViewActivity extends AppCompatActivity {
         initializeViews();
         setupWebView();
         setupButtons();
-        setupInstructions();
         setupBackPressedHandler();
         loadUrl();
     }
@@ -51,7 +48,6 @@ public class WebViewActivity extends AppCompatActivity {
         buttonBack = findViewById(R.id.buttonBack);
         buttonForward = findViewById(R.id.buttonForward);
         progressBar = findViewById(R.id.progressBar);
-        textViewInstructions = findViewById(R.id.textViewInstructions);
     }
 
     private void setupWebView() {
@@ -98,15 +94,6 @@ public class WebViewActivity extends AppCompatActivity {
                 webView.goForward();
             }
         });
-    }
-
-    private void setupInstructions() {
-        if (textViewInstructions != null) {
-            String instructionsTitle = getString(R.string.api_key_step_by_step_title);
-            String instructionsText = getString(R.string.api_key_instructions_detailed);
-            textViewInstructions.setText(instructionsTitle + "\n\n" + instructionsText);
-            textViewInstructions.setVisibility(View.VISIBLE);
-        }
     }
 
     private void updateNavigationButtons() {

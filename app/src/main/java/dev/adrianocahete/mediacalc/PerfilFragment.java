@@ -1,5 +1,6 @@
 package dev.adrianocahete.mediacalc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ public class PerfilFragment extends Fragment {
     private TextInputEditText editTextEmail;
     private TextInputEditText editTextApiKey;
     private Button buttonSave;
+    private Button buttonOpenPortal;
 
     private DatabaseHelper databaseHelper;
     private User currentUser;
@@ -42,6 +44,7 @@ public class PerfilFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextApiKey = view.findViewById(R.id.editTextApiKey);
         buttonSave = view.findViewById(R.id.buttonSave);
+        buttonOpenPortal = view.findViewById(R.id.buttonOpenPortal);
     }
 
     private void setupDatabase() {
@@ -65,6 +68,7 @@ public class PerfilFragment extends Fragment {
 
     private void setupButtons() {
         buttonSave.setOnClickListener(v -> saveUserData());
+        buttonOpenPortal.setOnClickListener(v -> openPortalDoAluno());
     }
 
     private void saveUserData() {
@@ -137,5 +141,11 @@ public class PerfilFragment extends Fragment {
                 ((MainActivity) getActivity()).updateNavigationSelection(R.id.nav_materias);
             }
         }
+    }
+
+    private void openPortalDoAluno() {
+        Intent intent = new Intent(getContext(), WebViewActivity.class);
+        intent.putExtra("url", getString(R.string.uva_login_url));
+        startActivity(intent);
     }
 }

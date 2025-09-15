@@ -1,6 +1,7 @@
 package dev.adrianocahete.mediacalc;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -343,8 +344,9 @@ public class MateriasFragment extends Fragment {
     }
 
     private void onCourseClick(Course course) {
-        // TODO: Open course details/edit dialog
-        Toast.makeText(getContext(), getString(R.string.course_details_placeholder) + " " + course.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), dev.adrianocahete.mediacalc.MateriaDetailActivity.class);
+        intent.putExtra("course_id", course.getId());
+        startActivity(intent);
     }
 
     private void onCourseDelete(Course course) {

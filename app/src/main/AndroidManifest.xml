@@ -32,6 +32,11 @@
             android:exported="false"
             android:theme="@style/Theme.MediaCalc" />
 
+        <activity
+            android:name=".MateriaDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MediaCalc" />
+
     </application>
 
 </manifest>

@@ -20,6 +20,7 @@
     <!-- Welcome Screen -->
     <string name="app_logo_description">Logo do MediaCalc</string>
     <string name="login_button">Login</string>
+    <string name="loading">Carregando...</string>
     <string name="continue_without_login">Entrar sem login</string>
     <string name="login_dialog_title">Login UVA</string>
     <string name="login_dialog_message">Você será redirecionado para o sistema da UVA para fazer login com suas credenciais institucionais.\n\nApós o login, você retornará automaticamente ao aplicativo.</string>
